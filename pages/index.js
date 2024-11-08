@@ -1,3 +1,4 @@
+// pages/index.js
 import { useState } from 'react';
 import axios from 'axios';
 
@@ -7,9 +8,10 @@ export default function Home() {
   const [selectedPlayer, setSelectedPlayer] = useState(null);
 
   const handleSearch = async () => {
+    // Placeholder for search function
     try {
       const response = await axios.get(`/api/search?username=${searchQuery}`);
-      setSelectedPlayer(response.data); // Assuming it returns player data
+      setSelectedPlayer(response.data); // Mocked response
     } catch (error) {
       console.error('Player not found');
     }
@@ -18,44 +20,51 @@ export default function Home() {
   const addPlayer = () => {
     if (selectedPlayer) {
       setPlayers((prevPlayers) => [...prevPlayers, selectedPlayer]);
-      setSelectedPlayer(null); // Reset search
+      setSelectedPlayer(null);
     }
   };
 
   return (
-    <div className="container mx-auto p-6">
-      <header className="flex justify-between items-center mb-8">
-        <h1 className="text-2xl font-bold">Roblox Player Tracker</h1>
-        <div className="flex items-center space-x-4">
+    <div className="min-h-screen bg-gray-900 text-white flex items-center justify-center">
+      <div className="max-w-2xl w-full p-6 bg-gray-800 rounded-lg shadow-lg">
+        <header className="mb-6 text-center">
+          <h1 className="text-3xl font-bold mb-2">Roblox Player Tracker</h1>
+          <p className="text-gray-400">Search and track Roblox players</p>
+        </header>
+
+        <div className="flex mb-6 space-x-2">
           <input
             type="text"
             placeholder="Search player..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="border p-2 rounded"
+            className="flex-1 p-3 rounded-lg bg-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
           <button
             onClick={handleSearch}
-            className="bg-blue-500 text-white px-4 py-2 rounded"
+            className="bg-blue-500 px-4 py-3 rounded-lg hover:bg-blue-600 transition"
           >
             Search
           </button>
           <button
             onClick={addPlayer}
-            className="bg-green-500 text-white px-4 py-2 rounded"
+            className="bg-green-500 px-4 py-3 rounded-lg hover:bg-green-600 transition"
           >
             Add Player
           </button>
         </div>
-      </header>
-      
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {players.map((player) => (
-          <div key={player.id} className="border p-4 rounded shadow">
-            <h2 className="font-semibold">{player.username}</h2>
-            <p>Status: {player.status || 'Unknown'}</p>
-          </div>
-        ))}
+
+        <div className="grid grid-cols-1 gap-4">
+          {players.map((player) => (
+            <div
+              key={player.id}
+              className="p-4 rounded-lg bg-gray-700 flex justify-between items-center shadow-md"
+            >
+              <span className="font-semibold">{player.username}</span>
+              <span className="text-gray-400">Status: {player.status || 'Unknown'}</span>
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   );
