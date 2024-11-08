@@ -9,23 +9,20 @@ export default async function handler(req, res) {
   }
 
   try {
-    // Updated endpoint for player search, if necessary
-    const response = await axios.get(`https://users.roblox.com/v1/users/search?keyword=${username}`);
-    
-    if (response.data.data.length === 0) {
-      // No player found with the given username
+    const response = await axios.get(`https://users.roproxy.com/v1/users/search?keyword=${username}`);
+    const player = response.data.data[0];
+
+    if (!player) {
       return res.status(404).json({ error: 'Player not found' });
     }
 
-    // Use the first player result as an example
-    const player = response.data.data[0];
     res.status(200).json({
       id: player.id,
       username: player.name,
-      status: 'Online', // Placeholder status
+      status: 'Online', // Placeholder
     });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: 'Failed to fetch player data. Please try again later.' });
+    res.status(500).json({ error: 'Failed to fetch player data' });
   }
 }
